@@ -1,0 +1,30 @@
+Leave details:
+
+	Access Permission:
+		
+		(URL Pattern)
+		Employee:
+
+			GET: Leave Details (byID, All)
+			POST: Apply Leave
+			PUT: Cancel Leave (Unless Admin Performs on Leave ID)
+
+		Admin:
+
+			GET: Leave Details (byID, All)
+			PUT: Perform Action on Leave ID (Actions: Approve, Hold, Cancel)
+			DELETE: Optional case to delete particular leave ID
+			
+			
+Leave details bean:
+
+id - UUID
+employee id - NUMBER
+leave type - String
+from date - String
+to date - String
+
+adminAction flag - Boolean
+admin id - NUMBER
+Comments - String
+status - String
