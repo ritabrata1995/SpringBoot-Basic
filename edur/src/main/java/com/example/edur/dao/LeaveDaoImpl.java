@@ -5,53 +5,31 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository("leaveDao")
 public class LeaveDaoImpl implements LeaveDao {
 
-
-
-    private static List<Leave> addLeave(){
-
-        List<Leave> leaveList = new ArrayList<>();
-
-        Leave l1 = new Leave( UUID.randomUUID(), "Earn", 2);
-
-        Leave l2 = new Leave( UUID.randomUUID(), "Casual", 2);
-
-        leaveList.add(l1);
-
-        leaveList.add(l2);
-
-        return leaveList;
-    }
-
-    List<Leave> finalList = addLeave();
+    List<Leave> leaveList = new ArrayList<>();
 
     @Override
     public List<Leave> getLeaves() {
-
-        List<Leave> allLeaves = finalList;
-        return allLeaves;
+        return leaveList;
     }
 
     @Override
-    public Optional<Leave> getLeavebyID(UUID id) {
+    public Leave getLeavebyID(UUID id) {
 
-        List<Leave> getLeave = finalList;
+        return leaveList.stream()
+                .filter(leave -> id.equals(leave.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Leave ID doesn't exist"));
+    }
 
-        System.out.println("DAO Incoming Value: " +  id);
-
-        System.out.println("DAO filtered value: " + getLeave
-                .stream()
-                .filter(leave -> leave.getId().equals(id))
-                .findFirst());
-
-        return getLeave
-                .stream()
-                .filter(leave -> leave.getId().equals(id))
-                .findFirst();
+    @Override
+    public UUID addLeave(Leave leave) {
+        Leave lv = new Leave(UUID.randomUUID(), "Earn", 2);
+        leaveList.add(lv);
+        return lv.getId();
     }
 }

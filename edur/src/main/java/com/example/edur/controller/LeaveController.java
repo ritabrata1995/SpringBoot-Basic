@@ -1,18 +1,19 @@
 package com.example.edur.controller;
 
-import ch.qos.logback.core.CoreConstants;
+
 import com.example.edur.model.Leave;
 import com.example.edur.service.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/employee")
+@RequestMapping("/api")
 public class LeaveController {
 
 	private final LeaveService leaveService;
@@ -23,26 +24,21 @@ public class LeaveController {
 	}
 	
 	@GetMapping(value = "/leaves")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_EMPLOYEE')")
 	public List<Leave> getAllLeaves() {
 		return leaveService.getLeaves();
 	}
 
 	@GetMapping(value = "/leave/{id}")
-	public Optional<Leave> getLeave(@NotNull @PathVariable("id") UUID id) {
-
-		System.out.print(leaveService.getLeavebyID(id));
-
-		return Optional.ofNullable(leaveService.getLeavebyID(id).orElse(null));
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_EMPLOYEE')")
+	public Leave getLeave(@NotNull @PathVariable("id") UUID id) {
+		return leaveService.getLeavebyID(id);
 	}
 
-//	@PostMapping((value = "/leave/{id}"))
-//	public UUID createNewPerson(@NotNull @Valid @RequestBody Person person) {
-//		return personService.insertNewPerson(person);
-//	}
-
-    @GetMapping(value = "/test")
-    public String test() {
-        return "test";
-    }
+	@PostMapping(value = "/addLeave")
+	@PreAuthorize("hasAuthority('employee:write')")
+	public UUID addLeave(@NotNull @Valid @RequestBody Leave leave) {
+		return leaveService.addLeave(leave);
+	}
 
 }

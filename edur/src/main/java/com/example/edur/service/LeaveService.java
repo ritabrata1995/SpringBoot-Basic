@@ -10,5 +10,7 @@ public interface LeaveService {
 
     List<Leave> getLeaves();
 
-    Optional<Leave> getLeavebyID(UUID id);
+    Leave getLeavebyID(UUID id);
+
+    UUID addLeave(Leave leave);
 }

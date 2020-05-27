@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -27,8 +26,12 @@ public class LeaveServiceImpl implements  LeaveService {
     }
 
     @Override
-    public Optional<Leave> getLeavebyID(UUID id) {
-        System.out.println("Service: " + leaveDao.getLeavebyID(id));
+    public Leave getLeavebyID(UUID id) {
         return leaveDao.getLeavebyID(id);
+    }
+
+    @Override
+    public UUID addLeave(Leave leave) {
+        return leaveDao.addLeave(leave);
     }
 }
